@@ -65,6 +65,7 @@ const authenticate = async (
 
     res.locals.user = outputUser;
     next();
+    
   } catch (error) {
     next(new CustomError((error as Error).message, 400));
   }
