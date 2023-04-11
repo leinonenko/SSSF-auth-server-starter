@@ -48,9 +48,7 @@ const authenticate = async (
       process.env.JWT_SECRET as string
     ) as OutputUser;
 
-    const user = await userModel
-      .findById(userFromToken.id)
-      .select('-password -role');
+    const user = await userModel.findById(userFromToken.id).select('-password');
 
     if (!user) {
       next(new CustomError('User not found', 403));
@@ -61,11 +59,11 @@ const authenticate = async (
       user_name: user.user_name,
       email: user.email,
       id: user._id,
+      role: user.role,
     };
 
     res.locals.user = outputUser;
     next();
-    
   } catch (error) {
     next(new CustomError((error as Error).message, 400));
   }
