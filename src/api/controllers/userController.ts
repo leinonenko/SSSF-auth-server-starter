@@ -102,6 +102,7 @@ const userPut = async (
         id: result._id,
       },
     };
+    res.json(response);
   } catch (error) {
     next(new CustomError((error as Error).message, 500));
   }
@@ -145,7 +146,7 @@ const checkToken = async (
     message: 'Token is valid',
     user: userFromToken,
   };
-  res.json({message: 'Token is valid'});
+  res.json(message);
 };
 
 export {check, userListGet, userGet, userPost, userPut, userDelete, checkToken};
