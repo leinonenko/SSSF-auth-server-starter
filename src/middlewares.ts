@@ -36,6 +36,7 @@ const authenticate = async (
       next(new CustomError('No token provided', 401));
       return;
     }
+
     const token = bearer.split(' ')[1];
 
     if (!token) {
@@ -51,18 +52,19 @@ const authenticate = async (
     const user = await userModel.findById(userFromToken.id).select('-password');
 
     if (!user) {
-      next(new CustomError('User not found', 403));
+      next(new CustomError('Token not valid', 403));
       return;
     }
 
     const outputUser: OutputUser = {
-      user_name: user.user_name,
-      email: user.email,
       id: user._id,
+      email: user.email,
+      user_name: user.user_name,
       role: user.role,
     };
 
     res.locals.user = outputUser;
+
     next();
   } catch (error) {
     next(new CustomError((error as Error).message, 400));
